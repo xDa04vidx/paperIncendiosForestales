@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Map, Marker } from 'pigeon-maps';
+import { Map, Marker, Overlay } from 'pigeon-maps';
 import icono from './assets/clima.png';
 import './App.css';
 
@@ -31,19 +31,19 @@ const App = () => {
   const [zoomMapaInferior, setZoomMapaInferior] = useState(11);
 
   const handleZoomInSuperior = () => {
-    setZoomMapaSuperior(prevZoom => Math.min(prevZoom + 1, 18)); // Límite de zoom máximo
+    setZoomMapaSuperior(prevZoom => Math.min(prevZoom + 0.5, 18)); // Límite de zoom máximo
   };
 
   const handleZoomOutSuperior = () => {
-    setZoomMapaSuperior(prevZoom => Math.max(prevZoom - 1, 1)); // Límite de zoom mínimo
+    setZoomMapaSuperior(prevZoom => Math.max(prevZoom - 0.5, 1)); // Límite de zoom mínimo
   };
 
   const handleZoomInInferior = () => {
-    setZoomMapaInferior(prevZoom => Math.min(prevZoom + 1, 18)); // Límite de zoom máximo
+    setZoomMapaInferior(prevZoom => Math.min(prevZoom + 0.5, 18)); // Límite de zoom máximo
   };
 
   const handleZoomOutInferior = () => {
-    setZoomMapaInferior(prevZoom => Math.max(prevZoom - 1, 1)); // Límite de zoom mínimo
+    setZoomMapaInferior(prevZoom => Math.max(prevZoom - 0.5, 1)); // Límite de zoom mínimo
   };
 
   const getFontSize = (nombre) => {
@@ -55,29 +55,80 @@ const App = () => {
     <div className="App">
     <div className='app-title'><h1></h1>Estaciones de la Red de Monitoreo de Calidad del Aire de Bogotá</div>
     <div className="map-container">
-      {/* Mapa superior con nombres de puntos */}
-      <Map
-        center={[4.710989, -74.072090]} // Centro del mapa (Bogotá)
-        zoom={zoomMapaSuperior} // Nivel de zoom controlado por el estado
-        width={window.innerWidth * 0.8} // Ajusta el ancho al 70% del ancho de la ventana
-        height={390} // Altura fija
-      >
-        {puntos.map(punto => (
-          <Marker
-            key={punto.id}
-            anchor={[punto.lat, punto.lng]}
-          >
-            {/* Mantenemos solo el icono */}
-            <img src={icono} alt={punto.nombre} style={{ width: '24px', height: '24px', position: 'absolute', top: '-12px', left: '-12px', cursor: 'pointer' }} />
-          </Marker>
-        ))}
-        {/* Controles de zoom para el mapa superior */}
-        <div className="zoom-controls">
-          <button onClick={handleZoomInSuperior} style={{ position: 'absolute', top: '10px', right: '10px' }}>Acercar</button>
-          <button onClick={handleZoomOutSuperior} style={{ position: 'absolute', top: '40px', right: '10px' }}>Alejar</button>
-        </div>
-      </Map>
-    </div>
+        {/* Mapa superior con nombres de puntos */}
+        <Map
+          center={[4.710989, -74.072090]} // Centro del mapa (Bogotá)
+          zoom={zoomMapaSuperior} // Nivel de zoom controlado por el estado
+          width={window.innerWidth * 0.8} // Ajusta el ancho al 70% del ancho de la ventana
+          height={400} // Altura fija
+        >
+          {puntos.map(punto => (
+            <Marker
+              key={punto.id}
+              anchor={[punto.lat, punto.lng]}
+            >
+              <img src={icono} alt={punto.nombre} style={{ width: '24px', height: '24px', position: 'absolute', top: '-12px', left: '-12px', cursor: 'pointer' }} />
+            </Marker>
+          ))}
+          {/* Add colored transparent rectangles for zones */}
+          <Overlay anchor={[4.82, -74.23]} offset={[0, 0]}>
+            <div style={{
+              width: '650px',
+              height: '250px',
+              backgroundColor: 'rgba(255, 0, 0, 0.3)', // Red with transparency
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>Norte</div>
+          </Overlay>
+          <Overlay anchor={[4.735, -74.144]} offset={[0, 0]}>
+            <div style={{
+              width: '150px',
+              height: '395px',
+              backgroundColor: 'rgba(0, 255, 0, 0.3)', // Green with transparency
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>Centro</div>
+          </Overlay>
+          <Overlay anchor={[4.6, -74.23]} offset={[0, 0]}>
+            <div style={{
+              width: '650px',
+              height: '250px',
+              backgroundColor: 'rgba(0, 0, 255, 0.3)', // Blue with transparency
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>Sur</div>
+          </Overlay>
+          <Overlay anchor={[4.735, -74.23]} offset={[0, 0]}>
+            <div style={{
+              width: '250px',
+              height: '395px',
+              backgroundColor: 'rgba(255, 255, 0, 0.3)', // Yellow with transparency
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>Oriente</div>
+          </Overlay>
+          <Overlay anchor={[4.735, -74.092]} offset={[0, 0]}>
+            <div style={{
+              width: '250px',
+              height: '395px',
+              backgroundColor: 'rgba(255, 165, 0, 0.3)', // Orange with transparency
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}>Occidente</div>
+          </Overlay>
+          {/* Controles de zoom para el mapa superior */}
+          <div className="zoom-controls">
+            <button onClick={handleZoomInSuperior} style={{ position: 'absolute', top: '10px', right: '10px' }}>Acercar</button>
+            <button onClick={handleZoomOutSuperior} style={{ position: 'absolute', top: '40px', right: '10px' }}>Alejar</button>
+          </div>
+        </Map>
+
+      </div>
 
     <div className="map-container">
       {/* Mapa inferior con nombres de puntos */}
@@ -85,7 +136,7 @@ const App = () => {
         center={[4.710989, -74.072090]} // Centro del mapa (Bogotá)
         zoom={zoomMapaInferior} // Nivel de zoom controlado por el estado
         width={window.innerWidth * 0.8} // Ajusta el ancho al 70% del ancho de la ventana
-        height={390} // Altura fija
+        height={400} // Altura fija
       >
         {puntos.map(punto => (
           <Marker
