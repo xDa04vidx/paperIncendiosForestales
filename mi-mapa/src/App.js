@@ -28,23 +28,7 @@ const puntos = [
 
 const App = () => {
   const [zoomMapaSuperior, setZoomMapaSuperior] = useState(11);
-  const [zoomMapaInferior, setZoomMapaInferior] = useState(11);
 
-  const handleZoomInSuperior = () => {
-    setZoomMapaSuperior(prevZoom => Math.min(prevZoom + 0.5, 18)); // Límite de zoom máximo
-  };
-
-  const handleZoomOutSuperior = () => {
-    setZoomMapaSuperior(prevZoom => Math.max(prevZoom - 0.5, 1)); // Límite de zoom mínimo
-  };
-
-  const handleZoomInInferior = () => {
-    setZoomMapaInferior(prevZoom => Math.min(prevZoom + 0.5, 18)); // Límite de zoom máximo
-  };
-
-  const handleZoomOutInferior = () => {
-    setZoomMapaInferior(prevZoom => Math.max(prevZoom - 0.5, 1)); // Límite de zoom mínimo
-  };
 
   const getFontSize = (nombre) => {
     // Reducir el tamaño de la fuente si el nombre es muy largo
@@ -58,17 +42,18 @@ const App = () => {
         {/* Mapa superior con nombres de puntos */}
         <Map
           center={[4.710989, -74.072090]} // Centro del mapa (Bogotá)
-          zoom={zoomMapaSuperior} // Nivel de zoom controlado por el estado
-          width={window.innerWidth * 0.8} // Ajusta el ancho al 70% del ancho de la ventana
-          height={400} // Altura fija
+          zoom={12} // Nivel de zoom controlado por el estado
+          width={window.innerWidth * 0.9} // Ajusta el ancho al 70% del ancho de la ventana
+          height={900} // Altura fija
         >
           {puntos.map(punto => (
             <Marker
-              key={punto.id}
-              anchor={[punto.lat, punto.lng]}
-            >
-              <img src={icono} alt={punto.nombre} style={{ width: '24px', height: '24px', position: 'absolute', top: '-12px', left: '-12px', cursor: 'pointer' }} />
-            </Marker>
+            key={punto.id}
+            anchor={[punto.lat, punto.lng]}
+          >
+            <img src={icono} alt={punto.nombre} style={{ width: '24px', height: '24px', position: 'absolute', top: '-12px', left: '-12px', cursor: 'pointer' }} />
+            <div style={{ position: 'absolute', top: '-30px', left: '50%', transform: 'translateX(-50%)', backgroundColor: 'white', padding: '2px 6px', borderRadius: '4px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', fontSize: getFontSize(punto.nombre) }}>{punto.nombre}</div>
+          </Marker>
           ))}
           {/* Add colored transparent rectangles for zones */}
           <Overlay anchor={[4.82, -74.23]} offset={[0, 0]}>
@@ -79,16 +64,20 @@ const App = () => {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
+              fontWeight: 'bold', 
+              fontSize: '1.2em'
             }}>Norte</div>
           </Overlay>
           <Overlay anchor={[4.735, -74.144]} offset={[0, 0]}>
             <div style={{
-              width: '150px',
+              width: '152px',
               height: '395px',
               backgroundColor: 'rgba(0, 255, 0, 0.3)', // Green with transparency
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
+              fontWeight: 'bold', 
+              fontSize: '1.2em'
             }}>Centro</div>
           </Overlay>
           <Overlay anchor={[4.6, -74.23]} offset={[0, 0]}>
@@ -99,6 +88,8 @@ const App = () => {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
+              fontWeight: 'bold', 
+              fontSize: '1.2em'
             }}>Sur</div>
           </Overlay>
           <Overlay anchor={[4.735, -74.23]} offset={[0, 0]}>
@@ -109,6 +100,8 @@ const App = () => {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
+              fontWeight: 'bold', 
+              fontSize: '1.2em'
             }}>Oriente</div>
           </Overlay>
           <Overlay anchor={[4.735, -74.092]} offset={[0, 0]}>
@@ -119,42 +112,17 @@ const App = () => {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
+              fontWeight: 'bold', 
+              fontSize: '1.2em'
             }}>Occidente</div>
           </Overlay>
-          {/* Controles de zoom para el mapa superior */}
-          <div className="zoom-controls">
-            <button onClick={handleZoomInSuperior} style={{ position: 'absolute', top: '10px', right: '10px' }}>Acercar</button>
-            <button onClick={handleZoomOutSuperior} style={{ position: 'absolute', top: '40px', right: '10px' }}>Alejar</button>
-          </div>
+
         </Map>
 
-      </div>
-
-    <div className="map-container">
-      {/* Mapa inferior con nombres de puntos */}
-      <Map
-        center={[4.710989, -74.072090]} // Centro del mapa (Bogotá)
-        zoom={zoomMapaInferior} // Nivel de zoom controlado por el estado
-        width={window.innerWidth * 0.8} // Ajusta el ancho al 70% del ancho de la ventana
-        height={400} // Altura fija
-      >
-        {puntos.map(punto => (
-          <Marker
-            key={punto.id}
-            anchor={[punto.lat, punto.lng]}
-          >
-            <img src={icono} alt={punto.nombre} style={{ width: '24px', height: '24px', position: 'absolute', top: '-12px', left: '-12px', cursor: 'pointer' }} />
-            <div style={{ position: 'absolute', top: '-30px', left: '50%', transform: 'translateX(-50%)', backgroundColor: 'white', padding: '2px 6px', borderRadius: '4px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)', fontSize: getFontSize(punto.nombre) }}>{punto.nombre}</div>
-          </Marker>
-        ))}
-        {/* Controles de zoom para el mapa inferior */}
-        <div className="zoom-controls">
-          <button onClick={handleZoomInInferior} style={{ position: 'absolute', top: '10px', right: '10px' }}>Acercar</button>
-          <button onClick={handleZoomOutInferior} style={{ position: 'absolute', top: '40px', right: '10px' }}>Alejar</button>
-        </div>
-      </Map>
-    </div>
+      </div>      
   </div>
+
+  
 
   );
 };
