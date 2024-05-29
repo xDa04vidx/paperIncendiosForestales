@@ -43,7 +43,7 @@ const App = () => {
         <Map
           center={[4.710989, -74.072090]} // Centro del mapa (Bogotá)
           zoom={12} // Nivel de zoom controlado por el estado
-          width={window.innerWidth * 0.9} // Ajusta el ancho al 70% del ancho de la ventana
+          width={window.innerWidth * 0.} // Ajusta el ancho al 70% del ancho de la ventana
           height={900} // Altura fija
         >
           {puntos.map(punto => (
@@ -102,7 +102,7 @@ const App = () => {
               alignItems: 'center',
               fontWeight: 'bold', 
               fontSize: '1.2em'
-            }}>Oriente</div>
+            }}>Occidente</div>
           </Overlay>
           <Overlay anchor={[4.735, -74.092]} offset={[0, 0]}>
             <div style={{
@@ -114,7 +114,7 @@ const App = () => {
               alignItems: 'center',
               fontWeight: 'bold', 
               fontSize: '1.2em'
-            }}>Occidente</div>
+            }}>Oriente</div>
           </Overlay>
 
         </Map>
